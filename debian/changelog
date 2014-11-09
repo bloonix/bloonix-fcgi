@@ -1,0 +1,19 @@
+bloonix-fcgi (0.3-1) unstable; urgency=low
+
+    * Fixed: try to fixing malformed utf8 strings.
+    * Updated the license information.
+
+ -- Jonny Schulz <js@bloonix.de>  Mon, 03 Nov 2014 21:09:24 +0100
+
+bloonix-fcgi (0.2-1) unstable; urgency=low
+
+    * Improved logging for signals hup, int, term and pipe.
+
+ -- Jonny Schulz <js@bloonix.de>  Thu, 16 Oct 2014 10:01:56 +0200
+
+bloonix-fcgi (0.1-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Jonny Schulz <js@bloonix.de>  Mon, 25 Aug 2014 15:00:00 +0200
+

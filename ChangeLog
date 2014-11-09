@@ -1,0 +1,12 @@
+bloonix-fcgi (0.3) released at 2014-11-03
+
+    * Fixed: try to fixing malformed utf8 strings.
+    * Updated the license information.
+
+bloonix-fcgi (0.2) released at 2014-10-16
+
+    * Improved logging for signals hup, int, term and pipe.
+
+bloonix-fcgi (0.1) released at 2014-08-25
+
+    * Initial release.
