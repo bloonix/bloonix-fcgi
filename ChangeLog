@@ -1,3 +1,7 @@
+bloonix-fcgi (0.4) released at 2014-XX-XX
+
+    * Ignoring "child $pid died 13".
+
 bloonix-fcgi (0.3) released at 2014-11-03
 
     * Fixed: try to fixing malformed utf8 strings.
