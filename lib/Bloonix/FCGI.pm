@@ -17,7 +17,7 @@ use constant PARENT_PID => $$;
 __PACKAGE__->mk_accessors(qw/socket request done children ipc log json/);
 __PACKAGE__->mk_counters(qw/ttlreq ttlbyt/);
 
-our $VERSION = "0.3";
+our $VERSION = "0.4";
 
 sub new {
     my $class = shift;
@@ -320,7 +320,17 @@ sub accept {
     }
 
     if ($self->{max_requests} && $self->ttlreq > $self->{max_requests}) {
-        $self->log->info("$$ reached max_requests of $self->{max_requests} - good bye");
+        $self->log->warning("$$ reached max_requests of $self->{max_requests} - good bye");
+        exit 0;
+    }
+
+    if ($self->{max_process_size} && $self->statm && $self->statm->{resident} > $self->{max_process_size}) {
+        $self->log->warning(
+            "$$ reached max_process_size of",
+            $self->{max_process_size_readable},
+            sprintf("(%.1fMB)", $self->statm->{resident} / 1048576),
+            "- good bye"
+        );
         exit 0;
     }
 
@@ -406,6 +416,11 @@ sub validate {
             regex => qr/^\d+\z/,
             default => 0,
         },
+        max_process_size => {
+            type => Params::Validate::SCALAR,
+            regex => qr/^\d+\s*(M|G)B{0,1}\z/i,
+            default => "1GB"
+        },
         server_status => {
             type => Params::Validate::HASHREF,
             default => { },
@@ -428,6 +443,12 @@ sub validate {
             default => "/var/cache/bloonix/blxipc.%P.lock",
         }
     });
+
+    $options{max_process_size_readable} = $options{max_process_size};
+    $options{max_process_size_readable} =~ s/\s//g;
+    my ($size, $unit) = ($options{max_process_size_readable} =~ /^(\d+)(M|G)B{0,1}\z/i);
+    $unit = uc $unit;
+    $options{max_process_size} = $unit eq "M" ? $size * 1048576 : $size * 1073741824;
 
     $options{server_status} = $class->validate_server_status(
         $options{server_status}

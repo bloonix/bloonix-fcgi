@@ -1,6 +1,7 @@
 bloonix-fcgi (0.4) released at 2014-XX-XX
 
     * Ignoring "child $pid died 13".
+    * New parameter max_program_size that defaults to 1GB.
 
 bloonix-fcgi (0.3) released at 2014-11-03
 
