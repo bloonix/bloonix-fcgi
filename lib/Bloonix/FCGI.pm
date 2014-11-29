@@ -418,7 +418,7 @@ sub validate {
         },
         max_process_size => {
             type => Params::Validate::SCALAR,
-            regex => qr/^\d+\s*(M|G)B{0,1}\z/i,
+            regex => qr/^(\d+\s*(M|G)B{0,1}|0)\z/i,
             default => "1GB"
         },
         server_status => {
@@ -444,11 +444,13 @@ sub validate {
         }
     });
 
-    $options{max_process_size_readable} = $options{max_process_size};
-    $options{max_process_size_readable} =~ s/\s//g;
-    my ($size, $unit) = ($options{max_process_size_readable} =~ /^(\d+)(M|G)B{0,1}\z/i);
-    $unit = uc $unit;
-    $options{max_process_size} = $unit eq "M" ? $size * 1048576 : $size * 1073741824;
+    if ($options{max_process_size}) {
+        $options{max_process_size_readable} = $options{max_process_size};
+        $options{max_process_size_readable} =~ s/\s//g;
+        my ($size, $unit) = ($options{max_process_size_readable} =~ /^(\d+)(M|G)B{0,1}\z/i);
+        $unit = uc $unit;
+        $options{max_process_size} = $unit eq "M" ? $size * 1048576 : $size * 1073741824;
+    }
 
     $options{server_status} = $class->validate_server_status(
         $options{server_status}
