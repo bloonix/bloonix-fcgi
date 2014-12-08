@@ -1,7 +1,8 @@
-bloonix-fcgi (0.4) released at 2014-XX-XX
+bloonix-fcgi (0.4) released at 2014-12-08
 
     * Ignoring "child $pid died 13".
     * New parameter max_program_size that defaults to 1GB.
+    * USR1 and USR2 signals are now forwarded to all children.
 
 bloonix-fcgi (0.3) released at 2014-11-03
 

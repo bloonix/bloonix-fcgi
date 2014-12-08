@@ -1,6 +1,6 @@
 Summary: Bloonix FCGI
 Name: bloonix-fcgi
-Version: 0.3
+Version: 0.4
 Release: 1%{dist}
 License: Commercial
 Group: Utilities/System
@@ -51,6 +51,10 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*
 
 %changelog
+* Mon Dec 08 2014 Jonny Schulz <js@bloonix.de> - 0.4-1
+- Ignoring "child $pid died 13".
+- New parameter max_program_size that defaults to 1GB.
+- USR1 and USR2 signals are now forwarded to all children.
 * Mon Nov 03 2014 Jonny Schulz <js@bloonix.de> - 0.3-1
 - Fixed: try to fixing malformed utf8 strings.
 - Updated the license information.

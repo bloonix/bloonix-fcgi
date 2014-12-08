@@ -1,3 +1,11 @@
+bloonix-fcgi (0.4-1) unstable; urgency=low
+
+    * Ignoring "child $pid died 13".
+    * New parameter max_program_size that defaults to 1GB.
+    * USR1 and USR2 signals are now forwarded to all children.
+
+ -- Jonny Schulz <js@bloonix.de>  Mon, 08 Dec 2014 08:28:47 +0100
+
 bloonix-fcgi (0.3-1) unstable; urgency=low
 
     * Fixed: try to fixing malformed utf8 strings.

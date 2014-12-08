@@ -84,6 +84,15 @@ sub daemonize {
         };
     }
 
+    foreach my $sig (qw/USR1 USR2/) {
+        $SIG{$sig} = sub {
+            my @chld = keys %{$self->{children}};
+            $self->log->warning("signal $sig received");
+            $self->log->warning("sending $sig to", @chld);
+            kill $sig, @chld;
+        };
+    }
+
     while ($self->done == 0) {
         # Reap timed out children.
         $self->reap_children;
@@ -161,6 +170,11 @@ sub daemonize {
                                 $SIG{$sig} = sub {
                                     $self->log->warning("signal $sig received");
                                     $self->done(1);
+                                };
+                            }
+                            foreach my $sig (qw/USR1 USR2/) {
+                                $SIG{$sig} = sub {
+                                    $self->log->warning("signal $sig received - ignoring");
                                 };
                             }
                             $self->ipc->locking(0);
@@ -336,34 +350,38 @@ sub accept {
 
     $self->ipc->set($$, status => "W", time => time);
 
-    while ($self->done == 0 && $self->request->Accept() >= 0) {
-        $self->ipc->set($$, status => "R", time => time);
-        my $req = Bloonix::FCGI::Request->new();
+    # Bloonix::Heaven->accept stops if undef is returned and the outer
+    # loop is used to prevent the child to die on SIGUSR1 and SIGUSR2.
+    while ($self->done == 0) {
+        while ($self->done == 0 && $self->request->Accept() >= 0) {
+            $self->ipc->set($$, status => "R", time => time);
+            my $req = Bloonix::FCGI::Request->new();
 
-        $self->ipc->set($$,
-            status  => "P",
-            ttlreq  => $self->ttlreq(1),
-            client  => $req->remote_addr,
-            request => join(" ", $req->request_method, $req->request_uri),
-        );
+            $self->ipc->set($$,
+                status  => "P",
+                ttlreq  => $self->ttlreq(1),
+                client  => $req->remote_addr,
+                request => join(" ", $req->request_method, $req->request_uri),
+            );
 
-        if ($server_status->{enabled} eq "yes" && $req->path_info eq $server_status->{location}) {
-            my $pretty = $req->param("pretty") // "false";
-            my $json = $pretty eq "true" ? $self->json->pretty : $self->json;
-            my $addr = $req->remote_addr || "n/a";
-            my $allow_from = $server_status->{allow_from};
+            if ($server_status->{enabled} eq "yes" && $req->path_info eq $server_status->{location}) {
+                my $pretty = $req->param("pretty") // "false";
+                my $json = $pretty eq "true" ? $self->json->pretty : $self->json;
+                my $addr = $req->remote_addr || "n/a";
+                my $allow_from = $server_status->{allow_from};
 
-            if ($allow_from->{all} || $allow_from->{$addr}) {
-                print "Content-Type: application/json\n\n";
-                print $json->encode({ status => "ok", data => $self->ipc->proc_status });
-                $self->log->info("server status request from $addr - access allowed");
-                next;
+                if ($allow_from->{all} || $allow_from->{$addr}) {
+                    print "Content-Type: application/json\n\n";
+                    print $json->encode({ status => "ok", data => $self->ipc->proc_status });
+                    $self->log->info("server status request from $addr - access allowed");
+                    next;
+                }
+
+                $self->log->warning("server status request from $addr - access denied");
             }
 
-            $self->log->warning("server status request from $addr - access denied");
+            return $req;
         }
-
-        return $req;
     }
 
     if ($self->done) {
