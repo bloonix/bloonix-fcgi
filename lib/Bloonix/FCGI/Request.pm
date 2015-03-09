@@ -246,6 +246,7 @@ sub _process_post_data {
             $self->_process_multipart($self->{postdata});
         } elsif ($self->is_json) {
             my $jsondata;
+            local $SIG{__DIE__} = "DEFAULT";
             eval { $jsondata = JSON->new->utf8->decode($self->{postdata}) };
 
             if ($@) {
