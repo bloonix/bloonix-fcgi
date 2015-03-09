@@ -1,6 +1,6 @@
 Summary: Bloonix FCGI
 Name: bloonix-fcgi
-Version: 0.4
+Version: 0.5
 Release: 1%{dist}
 License: Commercial
 Group: Utilities/System
@@ -51,6 +51,8 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*
 
 %changelog
+* Mon Mar 09 2015 Jonny Schulz <js@bloonix.de> - 0.5-1
+- Improved output of server-status.
 * Mon Dec 08 2014 Jonny Schulz <js@bloonix.de> - 0.4-1
 - Ignoring "child $pid died 13".
 - New parameter max_program_size that defaults to 1GB.
