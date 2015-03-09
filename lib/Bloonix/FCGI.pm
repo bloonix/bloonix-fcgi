@@ -17,7 +17,7 @@ use constant PARENT_PID => $$;
 __PACKAGE__->mk_accessors(qw/socket request done children ipc log json/);
 __PACKAGE__->mk_counters(qw/ttlreq ttlbyt/);
 
-our $VERSION = "0.5";
+our $VERSION = "0.6";
 
 sub new {
     my $class = shift;
