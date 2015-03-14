@@ -235,8 +235,12 @@ sub _process_post_data {
     my $self = shift;
     my $params = $self->{params};
 
-    if ($self->content_length > 0 && (!$self->{maxlen} || $self->content_length <= $self->{maxlen})) {
-        read(\*STDIN, $self->{postdata}, $self->content_length);
+    if ($self->content_length > 0) {
+        if ($self->{maxlen} && $self->content_length > $self->{maxlen}) {
+            $self->log->warning("post data too long with", $self->content_length, "bytes");
+        } else {
+            read(\*STDIN, $self->{postdata}, $self->content_length);
+        }
     }
 
     if ($self->{postdata}) {

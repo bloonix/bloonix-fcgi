@@ -1,6 +1,7 @@
 bloonix-fcgi (0.7) released at 2015-XX-XX
 
     * Moved SharedFile.pm and SharedMem.pm to the core package of Bloonix.
+    * Moved process management to the core package or Bloonix.
 
 bloonix-fcgi (0.6) released at 2015-03-09
 
