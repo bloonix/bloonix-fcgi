@@ -9,7 +9,7 @@ use Params::Validate qw();
 use POSIX qw(:sys_wait_h);
 use Log::Handler;
 use Time::HiRes qw();
-use Bloonix::FCGI::SharedFile;
+use Bloonix::SharedFile;
 use Bloonix::FCGI::Request;
 use base qw(Bloonix::Accessor);
 use constant PARENT_PID => $$;
@@ -57,7 +57,7 @@ sub init {
         &FCGI::FAIL_ACCEPT_ON_INTR
     );
 
-    $self->{ipc} = Bloonix::FCGI::SharedFile->new($self->{max_servers}, $self->{lockfile});
+    $self->{ipc} = Bloonix::SharedFile->new($self->{max_servers}, $self->{lockfile});
     $self->{done} = 0;
     $self->{children} = { };
     $self->{to_reap} = { };
