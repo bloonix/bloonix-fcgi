@@ -103,10 +103,6 @@ sub validate {
         listen => {
             type => Params::Validate::SCALAR,
             default => SOMAXCONN # from IO::Socket
-        },
-        lockfile => {
-            type => Params::Validate::SCALAR,
-            optional => 1
         }
     });
 
