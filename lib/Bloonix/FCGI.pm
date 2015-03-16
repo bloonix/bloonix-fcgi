@@ -13,7 +13,7 @@ use Time::HiRes qw();
 use constant PARENT_PID => $$;
 
 use base qw(Bloonix::Accessor);
-__PACKAGE__->mk_accessors(qw/log proc request socket/);
+__PACKAGE__->mk_accessors(qw/log proc request sock/);
 
 our $VERSION = "0.7";
 
@@ -37,7 +37,7 @@ sub init_fcgi_socket {
     my $self = shift;
 
     $self->log->info("start socket on port :$self->{port}");
-    $self->{socket} = FCGI::OpenSocket(
+    $self->{sock} = FCGI::OpenSocket(
         ":".$self->{port},
         $self->{listen},
     );
@@ -57,15 +57,34 @@ sub init_fcgi_request {
         \*STDOUT,
         \*STDERR,
         \%ENV,
-        $self->socket,
+        $self->sock,
         &FCGI::FAIL_ACCEPT_ON_INTR
     );
 }
 
 sub accept {
-    my $self = shift;
+    my ($self, $timeout) = @_;
+
+    if ($timeout) {
+        return $self->accept_timeout($timeout);
+    }
 
     return $self->request->Accept() >= 0;
+}
+
+sub accept_timeout {
+    my ($self, $timeout) = @_;
+    my $ret;
+
+    eval {
+        local $SIG{__DIE__} = sub { alarm(0) };
+        local $SIG{ALRM} = sub { die "FCGI ACCEPT TIMEOUT" };
+        Time::HiRes::alarm($timeout);
+        $ret = $self->request->Accept() >= 0;
+        alarm(0);
+    };
+
+    return $ret;
 }
 
 sub get_new_cgi {
@@ -111,7 +130,7 @@ sub validate {
 
 sub DESTROY {
     if ($$ == PARENT_PID) {
-        FCGI::CloseSocket(shift->{socket});
+        FCGI::CloseSocket(shift->{sock});
     }
 }
 
