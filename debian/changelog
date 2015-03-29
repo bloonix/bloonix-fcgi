@@ -1,3 +1,11 @@
+bloonix-fcgi (0.7-1) unstable; urgency=low
+
+    * Moved SharedFile.pm and SharedMem.pm to the core package of Bloonix.
+    * Moved process management to the core package or Bloonix.
+    * Implemented a timeout funcionality to workaround blocking accept().
+
+ -- Jonny Schulz <js@bloonix.de>  Sat, 21 Mar 2015 22:16:10 +0100
+
 bloonix-fcgi (0.6-1) unstable; urgency=low
 
     * Suppress fatal messages for malformed json strings.

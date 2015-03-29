@@ -1,6 +1,6 @@
 Summary: Bloonix FCGI
 Name: bloonix-fcgi
-Version: 0.6
+Version: 0.7
 Release: 1%{dist}
 License: Commercial
 Group: Utilities/System
@@ -51,6 +51,10 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*
 
 %changelog
+* Sat Mar 21 2015 Jonny Schulz <js@bloonix.de> - 0.7-1
+- Moved SharedFile.pm and SharedMem.pm to the core package of Bloonix.
+- Moved process management to the core package or Bloonix.
+- Implemented a timeout funcionality to workaround blocking accept().
 * Mon Mar 09 2015 Jonny Schulz <js@bloonix.de> - 0.6-1
 - Suppress fatal messages for malformed json strings.
 * Mon Mar 09 2015 Jonny Schulz <js@bloonix.de> - 0.5-1
