@@ -1,6 +1,6 @@
 Summary: Bloonix FCGI
 Name: bloonix-fcgi
-Version: 0.7
+Version: 0.8
 Release: 1%{dist}
 License: Commercial
 Group: Utilities/System
@@ -51,6 +51,8 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*
 
 %changelog
+* Tue Mar 29 2016 Jonny Schulz <js@bloonix.de> - 0.8-1
+- Extra release because the gpg key of bloonix is updated.
 * Sat Mar 21 2015 Jonny Schulz <js@bloonix.de> - 0.7-1
 - Moved SharedFile.pm and SharedMem.pm to the core package of Bloonix.
 - Moved process management to the core package or Bloonix.

@@ -1,3 +1,9 @@
+bloonix-fcgi (0.8-1) unstable; urgency=low
+
+    * Extra release because the gpg key of bloonix is updated.
+
+ -- Jonny Schulz <js@bloonix.de>  Tue, 29 Mar 2016 02:42:26 +0200
+
 bloonix-fcgi (0.7-1) unstable; urgency=low
 
     * Moved SharedFile.pm and SharedMem.pm to the core package of Bloonix.

@@ -15,7 +15,7 @@ use constant PARENT_PID => $$;
 use base qw(Bloonix::Accessor);
 __PACKAGE__->mk_accessors(qw/log proc request sock/);
 
-our $VERSION = "0.7";
+our $VERSION = "0.8";
 
 sub new {
     my $class = shift;
